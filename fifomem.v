@@ -3,8 +3,6 @@ module fifomem #(
     parameter ADDR_SIZE = 4
 ) (
     input wr_clk,
-    input rd_clk,
-    input rst,
     input [ADDR_SIZE-1:0] wr_addr,
     input [ADDR_SIZE-1:0] rd_addr,
     input wr_en,

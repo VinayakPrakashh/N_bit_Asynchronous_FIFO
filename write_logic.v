@@ -29,6 +29,6 @@ assign wr_ptr = wbin[ADDR_SIZE-1:0];
 assign wbin_next = wbin + (wr_en & ~full);
 assign wfull_val = (wgray_next == {~wq2_ptr[ADDR_SIZE:ADDR_SIZE-1],wq2_ptr[ADDR_SIZE-2:0]});
 
-b_to_g #(ADDR_SIZE+1) b2g(wbin_next,wgray_next);
+binary_to_gray #(ADDR_SIZE+1) b2g(wbin_next,wgray_next);
 
 endmodule
