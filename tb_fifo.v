@@ -14,6 +14,7 @@ module tb_fifo;
   wire [ADDR_SIZE-1:0] wr_ptr, rd_ptr;
   wire [ADDR_SIZE:0] wr_ptr_gray, rd_ptr_gray;
   wire [ADDR_SIZE:0] wq2_ptr, rq2_wptr;
+  wire [ADDR_SIZE:0] rgray_next;
 
   // Instantiate the FIFO top module
   fifo_top #(DATA_SIZE, ADDR_SIZE) uut (
@@ -36,6 +37,7 @@ module tb_fifo;
   assign rd_ptr_gray = uut.rd_ptr_gray;
   assign wq2_ptr = uut.wq2_ptr;
   assign rq2_wptr = uut.rq2_wptr;
+  assign rgray_next = uut.rd.rgray_next;
 
   // Clock generation
   always #5 wr_clk = ~wr_clk;
@@ -59,21 +61,87 @@ module tb_fifo;
     // Write data to the FIFO
     #10;
     wr_en = 1;
+    wr_data = 4'b0001;
+    #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
+    wr_data = 4'b0010;
+    #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
+    wr_data = 4'b0011;
+    #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
+    wr_data = 4'b0100;
+    #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
+    wr_data = 4'b0101;
+    #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
+    wr_data = 4'b0110;
+    #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
+    wr_data = 4'b0111;
+    #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
+    wr_data = 4'b1000;
+    #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
+    wr_data = 4'b1001;
+    #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
     wr_data = 4'b1010;
     #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
+    wr_data = 4'b1011;
+    #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
     wr_data = 4'b1100;
     #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
+    wr_data = 4'b1101;
+    #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
+    wr_data = 4'b1110;
+    #10;
+    wr_en = 0;
+    #10;
+    wr_en = 1;
     wr_data = 4'b1111;
     #10;
     wr_en = 0;
-
-    // Read data from the FIFO
-    #30;
-    rd_en = 1;
-    #30;
-    rd_en = 0;
-
-    // Finish simulation
+        #10;
+    wr_en = 1;
+    wr_data = 4'b1110;
+    #10;
+    wr_en = 0;
+    #10 
+    rd_en=1;
+    #10 rd_en =0;
     #100;
     $finish;
   end
