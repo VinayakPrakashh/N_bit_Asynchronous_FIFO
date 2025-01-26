@@ -13,7 +13,7 @@ module fifo_top #(
 wire [ADDR_SIZE-1:0] wr_ptr,rd_ptr;
 wire [ADDR_SIZE:0] wr_ptr_gray,rd_ptr_gray;
 wire [ADDR_SIZE:0] wq2_ptr,rq2_wptr;
-
+wire en;
 
 assign en = wr_en & ~full;
 
