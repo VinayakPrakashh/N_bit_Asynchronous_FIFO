@@ -11,6 +11,7 @@ module fifomem #(
 );
     
 reg [DATA_SIZE-1:0] mem [(1<<ADDR_SIZE)-1:0];
+//reg [DATA_SIZE-1:0] mem [1:0];
 
 assign rd_data = mem[rd_addr];
 
