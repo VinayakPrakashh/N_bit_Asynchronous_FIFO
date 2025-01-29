@@ -1,23 +1,20 @@
 module tb_fifo;
 
-  parameter DATA_SIZE = 4;
-  parameter ADDR_SIZE = 4;
-
   reg wr_clk, rd_clk;
   reg wr_rst, rd_rst;
   reg wr_en, rd_en;
-  reg [DATA_SIZE-1:0] wr_data;
-  wire [DATA_SIZE-1:0] rd_data;
+  reg [3:0] wr_data;
+  wire [3:0] rd_data;
   wire full, empty;
 
   // Internal wires
-  wire [ADDR_SIZE-1:0] wr_ptr, rd_ptr;
-  wire [ADDR_SIZE:0] wr_ptr_gray, rd_ptr_gray;
-  wire [ADDR_SIZE:0] wq2_ptr, rq2_wptr;
-  wire [ADDR_SIZE:0] rgray_next;
+  wire [3:0] wr_ptr, rd_ptr;
+  wire [4:0] wr_ptr_gray, rd_ptr_gray;
+  wire [4:0] wq2_ptr, rq2_wptr;
+  wire [4:0] rgray_next;
 
   // Instantiate the FIFO top module
-  fifo_top #(DATA_SIZE, ADDR_SIZE) uut (
+  fifo_top uut (
     .wr_clk(wr_clk),
     .rd_clk(rd_clk),
     .wr_rst(wr_rst),

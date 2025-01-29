@@ -1,6 +1,6 @@
-module binary_to_gray #(parameter N = 4) (
-  input  [N-1:0] binary,
-  output  [N-1:0] gray
+module binary_to_gray (
+  input  [4:0] binary,
+  output  [4:0] gray
 );
 
 assign gray = binary ^ (binary >> 1);

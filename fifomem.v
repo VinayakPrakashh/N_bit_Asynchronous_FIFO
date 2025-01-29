@@ -1,17 +1,13 @@
-module fifomem #(
-    parameter DATA_SIZE = 4,
-    parameter ADDR_SIZE = 4
-) (
+module fifomem (
     input wr_clk,
-    input [ADDR_SIZE-1:0] wr_addr,
-    input [ADDR_SIZE-1:0] rd_addr,
+    input [3:0] wr_addr,
+    input [3:0] rd_addr,
     input wr_en,
-    input [DATA_SIZE-1:0] wr_data,
-    output [DATA_SIZE-1:0] rd_data
+    input [3:0] wr_data,
+    output [3:0] rd_data
 );
     
-reg [DATA_SIZE-1:0] mem [(1<<ADDR_SIZE)-1:0];
-//reg [DATA_SIZE-1:0] mem [1:0];
+reg [3:0] mem [15:0];
 
 assign rd_data = mem[rd_addr];
 

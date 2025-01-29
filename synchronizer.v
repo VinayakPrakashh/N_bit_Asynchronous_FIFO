@@ -1,22 +1,21 @@
-module cdc_synchronizer #(parameter WIDTH = 4) (
+module cdc_synchronizer (
   input clk,
   input rst,
-  input [WIDTH-1:0] data_in,
-  output [WIDTH-1:0] data
-
+  input [4:0] data_in,
+  output [4:0] data
 );
 
-  wire [WIDTH-1:0] sync1_wire;
+  wire [4:0] sync1_wire;
 
   // Instantiate the d_ff modules for synchronization
-  d_ff #(WIDTH) ff1 (
+  d_ff ff1 (
     .clk(clk),
     .rst(rst),
     .d(data_in),
     .q(sync1_wire)
   );
 
-  d_ff #(WIDTH) ff2 (
+  d_ff ff2 (
     .clk(clk),
     .rst(rst),
     .d(sync1_wire),

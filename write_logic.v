@@ -1,18 +1,16 @@
-module wr_logic #(
-    parameter ADDR_SIZE = 4
-) (
+module wr_logic (
     input wr_clk,
     input wr_en,
     input wr_rst,
-    input [ADDR_SIZE:0] wq2_ptr,
-    output [ADDR_SIZE-1:0] wr_ptr,
-    output reg [ADDR_SIZE:0] wr_ptr_gray,
+    input [4:0] wq2_ptr,
+    output [3:0] wr_ptr,
+    output reg [4:0] wr_ptr_gray,
     output reg full
 );
 
-   reg [ADDR_SIZE:0] wbin;         // Binary write pointer
+   reg [4:0] wbin;         // Binary write pointer
 
-   wire [ADDR_SIZE:0] wgray_next, wbin_next;   // Next write pointer in gray and binary code
+   wire [4:0] wgray_next, wbin_next;   // Next write pointer in gray and binary code
    wire wfull_val;   
 
  always @(posedge wr_clk or posedge wr_rst) begin
@@ -25,10 +23,10 @@ module wr_logic #(
         full <= wfull_val;
     end
  end   
-assign wr_ptr = wbin[ADDR_SIZE-1:0];
+assign wr_ptr = wbin[3:0];
 assign wbin_next = wbin + (wr_en & ~full);
-assign wfull_val = (wgray_next == {~wq2_ptr[ADDR_SIZE:ADDR_SIZE-1],wq2_ptr[ADDR_SIZE-2:0]});
+assign wfull_val = (wgray_next == {~wq2_ptr[4:3],wq2_ptr[2:0]});
 
-binary_to_gray #(ADDR_SIZE+1) b2g(wbin_next,wgray_next);
+binary_to_gray b2g(wbin_next,wgray_next);
 
 endmodule
