@@ -1,6 +1,6 @@
 module fifo_mem #(
     DATA_SIZE = 8,
-    ADDR_SIZE = 4
+    ADDR_SIZE = 4,
     MEM_DEPTH = 16
 ) (
     input i_wr_clk,
@@ -10,17 +10,17 @@ module fifo_mem #(
     input [DATA_SIZE-1:0] i_wr_data,
     input [ADDR_SIZE-1:0] i_wr_addr,
     input [ADDR_SIZE-1:0] i_rd_addr,
-    output  [DATA_SIZE-1:0] o_rd_data,
+    output  [DATA_SIZE-1:0] o_rd_data
 );
     
 
-reg [DATA_SIZE-1:0] mem [0:MEM_DEPTH-1];
+reg [DATA_SIZE-1:0] mem [MEM_DEPTH-1:0];
 
 wire we_en_r;
 
-assign we_en_r = i_wr_en & ~i_full;
+assign we_en_r = i_wr_en & !i_full;
 
-always @(posedge i_wr_clk or posedge i_wr_rst) begin
+always @(posedge i_wr_clk or negedge i_wr_rst) begin
     if(!i_wr_rst) begin
         mem[0] <= 0;
         mem[1] <= 0;
