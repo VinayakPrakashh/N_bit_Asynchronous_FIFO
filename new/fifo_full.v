@@ -36,8 +36,6 @@ assign wr_bin_next_s  = {wr_bin_r + (i_wr_en & !full_r)};
 
 assign wr_gray_next_s = (wr_bin_next_s >> 1) ^ wr_bin_next_s ;
 
-assign full_s = (wr_gray_next_s == i_rd_ptr_clx);
-
 assign full_s         = ((wr_gray_next_s[ADDRSIZE]     != i_rd_ptr_clx[ADDRSIZE] ) &&
                          (wr_gray_next_s[ADDRSIZE-1]   != i_rd_ptr_clx[ADDRSIZE-1]) &&
                          (wr_gray_next_s[ADDRSIZE-2:0] == i_rd_ptr_clx[ADDRSIZE-2:0]));
