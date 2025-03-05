@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+
 module fifo_empty  (
     input rd_clk,
     input rd_en,

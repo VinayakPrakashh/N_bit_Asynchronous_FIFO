@@ -10,7 +10,7 @@ module fifo_top (
 
 wire [3:0] wr_ptr,rd_ptr;
 wire [4:0] wr_ptr_gray,rd_ptr_gray;
-wire [4:0] wq2_ptr,rq2_wptr;
+wire [4:0] wq2_ptr,rq2_wptr;mfgmkgfk
 wire en;
 
 assign en = wr_en & ~full;

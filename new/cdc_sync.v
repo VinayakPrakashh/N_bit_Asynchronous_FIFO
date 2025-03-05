@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+
 module cdc_synchronizer(
     input clk,
     input rst,
@@ -8,6 +8,16 @@ module cdc_synchronizer(
 
 wire [4:0] in_data_n;
 
-dff dff_1(clk, rst, in_data, in_data_n);
-dff dff_2(clk, rst, in_data_n, out_data);
+dff dff_1(
+    .clk(clk),
+    .rst(rst),
+    .wr_data(in_data),
+    .rd_data(in_data_n)
+);
+dff dff_2(
+    .clk(clk),
+    .rst(rst),
+    .wr_data(in_data_n),
+    .rd_data(out_data)
+);
 endmodule

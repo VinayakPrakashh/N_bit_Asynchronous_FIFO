@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+
 module fifo_full (
     input wr_clk,
     input wr_en,

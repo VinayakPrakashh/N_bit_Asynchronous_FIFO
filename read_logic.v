@@ -1,33 +1,53 @@
-module rd_logic (
+
+module fifo_empty  (
     input rd_clk,
     input rd_en,
     input rd_rst,
-    input [4:0] rq2_wptr,
-    output [3:0] rd_ptr,
-    output reg [4:0] rd_ptr_gray,
-    output reg empty
+    input [4:0] wr_ptr_addr_sync,
+    output reg empty,
+    output reg [4:0] rd_addr_grey,
+    output  [3:0] rd_addr_bin
 );
     
-reg [4:0] rbin;         // Binary read pointer
+reg [4:0] rd_addr_bin_r;
+reg empty_r;
 
-wire [4:0] rgray_next, rbin_next;   // Next read pointer in gray and binary code
-wire rempty_val;
+wire empty_n;
+wire [4:0] rd_addr_grey_next, rd_addr_bin_next;
 
-always @(posedge rd_clk or posedge rd_rst) begin
-    if(rd_rst) begin
-         {rbin, rd_ptr_gray} <= 0;
-         empty <= 1;
+always @(posedge rd_clk or negedge rd_rst) begin
+    if(!rd_rst) begin
+        rd_addr_bin_r <= 5'b0;
+        rd_addr_grey <= 5'b0;
     end
-    else  begin
-        {rbin, rd_ptr_gray} <= {rbin_next, rgray_next}; // Shift the read pointer
-        empty <= rempty_val;
+    else begin
+        rd_addr_bin_r <= rd_addr_bin_next;
+        rd_addr_grey <= rd_addr_grey_next;
     end
 end
 
-assign rd_ptr = rbin[3:0];
-assign rbin_next = rbin + (rd_en & ~empty);
-assign rempty_val = (rgray_next == rq2_wptr);
+assign rd_addr_bin = rd_addr_bin_r[3:0]; // read pointer
 
-binary_to_gray b2g(rbin_next,rgray_next);
+assign rd_addr_bin_next = {rd_addr_bin_r+(!empty_r & rd_en)};
 
+assign rd_addr_grey_next = (rd_addr_bin_next >>1) ^ rd_addr_bin_next;
+
+assign empty_n = (rd_addr_grey_next == wr_ptr_addr_sync); //empty condition
+
+always @(posedge rd_clk or negedge rd_rst) begin
+    if(!rd_rst) begin
+        empty <= 1'b1;
+    end
+    else begin
+        empty <= empty_n;
+    end
+end
+always @(posedge rd_clk or negedge rd_rst) begin
+    if (!rd_rst) begin
+        empty_r <= 1'b1;
+    end
+    else begin
+        empty_r <= empty_n;
+    end
+end
 endmodule

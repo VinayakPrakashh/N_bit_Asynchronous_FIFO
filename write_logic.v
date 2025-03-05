@@ -1,32 +1,55 @@
-module wr_logic (
+
+module fifo_full (
     input wr_clk,
     input wr_en,
     input wr_rst,
-    input [4:0] wq2_ptr,
-    output [3:0] wr_ptr,
-    output reg [4:0] wr_ptr_gray,
-    output reg full
+    input [4:0] rd_ptr_addr_sync,
+    output reg full,
+    output reg [4:0] wr_addr_grey,
+    output  [3:0] wr_addr_bin
 );
 
-   reg [4:0] wbin;         // Binary write pointer
+reg [4:0] wr_addr_bin_r;
+reg full_r;
 
-   wire [4:0] wgray_next, wbin_next;   // Next write pointer in gray and binary code
-   wire wfull_val;   
+wire full_n;
+wire [4:0] wr_addr_grey_next;
+wire [4:0] wr_addr_binary_next;
 
- always @(posedge wr_clk or posedge wr_rst) begin
-    if(wr_rst) begin
-         {wbin, wr_ptr_gray} <= 0;
-         full <= 0;
+always @(posedge wr_clk or negedge wr_rst) begin
+    if(!wr_rst) begin
+        wr_addr_bin_r <= 5'b0;
+        wr_addr_grey <= 5'b0;
     end
-    else  begin
-        {wbin, wr_ptr_gray} <= {wbin_next, wgray_next}; // Shift the write pointer
-        full <= wfull_val;
+    else begin
+        wr_addr_bin_r <= wr_addr_binary_next;
+        wr_addr_grey <= wr_addr_grey_next;
     end
- end   
-assign wr_ptr = wbin[3:0];
-assign wbin_next = wbin + (wr_en & ~full);
-assign wfull_val = (wgray_next == {~wq2_ptr[4:3],wq2_ptr[2:0]});
+end
 
-binary_to_gray b2g(wbin_next,wgray_next);
+assign wr_addr_bin = wr_addr_bin_r[3:0]; // write pointer
 
+assign wr_addr_binary_next = {wr_addr_bin_r+(!full_r & wr_en)};
+
+assign wr_addr_grey_next = (wr_addr_binary_next >>1) ^ wr_addr_binary_next;
+
+assign full_n         = ((wr_addr_grey_next[4]     != rd_ptr_addr_sync[4] ) &&
+                         (wr_addr_grey_next[3]   != rd_ptr_addr_sync[3]) &&
+                         (wr_addr_grey_next[2:0] == rd_ptr_addr_sync[2:0]))       ;                   
+always @(posedge wr_clk or negedge wr_rst) begin
+    if(!wr_rst) begin
+        full <= 1'b0;
+    end
+    else begin
+        full <= full_n;
+    end
+end
+always @(posedge wr_clk or negedge wr_rst) begin
+    if (!wr_rst) begin
+        full_r <= 1'b0;
+    end
+    else begin
+        full_r <= full_n;
+    end
+end
 endmodule

@@ -1,24 +1,23 @@
-module cdc_synchronizer (
-  input clk,
-  input rst,
-  input [4:0] data_in,
-  output [4:0] data
+
+module cdc_synchronizer(
+    input clk,
+    input rst,
+    input [4:0] in_data,
+    output [4:0] out_data
 );
 
-  wire [4:0] sync1_wire;
+wire [4:0] in_data_n;
 
-  // Instantiate the d_ff modules for synchronization
-  d_ff ff1 (
+dff dff_1(
     .clk(clk),
     .rst(rst),
-    .d(data_in),
-    .q(sync1_wire)
-  );
-
-  d_ff ff2 (
+    .wr_data(in_data),
+    .rd_data(in_data_n)
+);
+dff dff_2(
     .clk(clk),
     .rst(rst),
-    .d(sync1_wire),
-    .q(data)
-  );
+    .wr_data(in_data_n),
+    .rd_data(out_data)
+);
 endmodule

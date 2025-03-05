@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+
 module fifo_top (
     input wr_clk,
     input rd_clk,
@@ -15,12 +15,12 @@ module fifo_top (
 wire [4:0] wr_addr_grey_sync, rd_addr_grey_sync;
 wire [4:0] wr_addr_grey, rd_addr_grey;
 wire [3:0] wr_addr, rd_addr;
-fifo_full f(wr_clk, wr_en, wr_rst, rd_addr_grey_sync, full, wr_addr_grey, wr_addr);
-fifo_empty e(rd_clk, rd_en, rd_rst, wr_addr_grey_sync, empty, rd_addr_grey, rd_addr);
+fifo_full f(.wr_clk(wr_clk), .wr_en(wr_en), .wr_rst(wr_rst), .rd_ptr_addr_sync(rd_addr_grey_sync), .full(full), .wr_addr_grey(wr_addr_grey), .wr_addr_bin(wr_addr));
+fifo_empty e(.rd_clk(rd_clk), .rd_en(rd_en), .rd_rst(rd_rst), .wr_ptr_addr_sync(wr_addr_grey_sync), .empty(empty), .rd_addr_grey(rd_addr_grey), .rd_addr_bin(rd_addr));
 
-cdc_synchronizer wr_addr_sync(wr_clk, wr_rst, rd_addr_grey, rd_addr_grey_sync);
-cdc_synchronizer rd_addr_sync(rd_clk, rd_rst, wr_addr_grey, wr_addr_grey_sync);
+cdc_synchronizer wr_addr_sync(.clk(wr_clk), .rst(wr_rst), .in_data(rd_addr_grey), .out_data(rd_addr_grey_sync));
+cdc_synchronizer rd_addr_sync(.clk(rd_clk), .rst(rd_rst), .in_data(wr_addr_grey), .out_data(wr_addr_grey_sync));
 
-fifo_memory m(wr_clk, wr_rst, wr_en, full, wr_addr, rd_addr, wr_data, rd_data);
+fifo_memory m(.clk(wr_clk), .rst(wr_rst), .wr_en(wr_en), .full(full), .wr_addr(wr_addr), .rd_addr(rd_addr), .wr_data(wr_data), .rd_data(rd_data));
 
 endmodule
