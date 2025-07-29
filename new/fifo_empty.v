@@ -28,7 +28,7 @@ end
 
 assign rd_addr_bin = rd_addr_bin_r[3:0]; // read pointer
 
-assign rd_addr_bin_next = {rd_addr_bin_r+(!empty_r & rd_en)};
+assign rd_addr_bin_next = {rd_addr_bin_r+(!empty_r && rd_en)};
 
 assign rd_addr_grey_next = (rd_addr_bin_next >>1) ^ rd_addr_bin_next;
 

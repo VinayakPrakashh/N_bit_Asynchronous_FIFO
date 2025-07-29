@@ -38,6 +38,7 @@
                 mem[wr_addr] <= wr_data; //synchronous write
             end
         end
+        
     end
 
     assign rd_data = mem[rd_addr]; //asynchronous read
